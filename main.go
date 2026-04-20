@@ -56,6 +56,12 @@ func main() {
 		cfg.Server.Port = *port
 	}
 
+	// Default to localhost if no host is set, to avoid accidentally exposing
+	// the server on all interfaces when running locally.
+	if cfg.Server.Host == "" {
+		cfg.Server.Host = "127.0.0.1"
+	}
+
 	app, err := server.New(cfg)
 	if err != nil {
 		log.Fatalf("failed to initialize server: %v", err)
