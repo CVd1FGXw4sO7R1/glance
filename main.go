@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/glanceapp/glance/internal/config"
 	"github.com/glanceapp/glance/internal/server"
@@ -26,10 +27,19 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Default to "glance.yml" in the user's home directory if the config file doesn't exist
+	// Default config search order:
+	// 1. Explicit -config flag value
+	// 2. ./glance.yml (current directory)
+	// 3. ~/.config/glance/glance.yml (XDG-style config dir)
+	// 4. ~/glance.yml (home directory fallback)
 	if _, err := os.Stat(*configPath); os.IsNotExist(err) && *configPath == "glance.yml" {
 		if home, err := os.UserHomeDir(); err == nil {
-			*configPath = home + "/glance.yml"
+			xdgPath := filepath.Join(home, ".config", "glance", "glance.yml")
+			if _, err := os.Stat(xdgPath); err == nil {
+				*configPath = xdgPath
+			} else {
+				*configPath = filepath.Join(home, "glance.yml")
+			}
 		}
 	}
 
