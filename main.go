@@ -26,6 +26,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	// Default to "glance.yml" in the user's home directory if the config file doesn't exist
+	if _, err := os.Stat(*configPath); os.IsNotExist(err) && *configPath == "glance.yml" {
+		if home, err := os.UserHomeDir(); err == nil {
+			*configPath = home + "/glance.yml"
+		}
+	}
+
 	cfg, err := config.Load(*configPath)
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
