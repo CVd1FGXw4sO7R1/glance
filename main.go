@@ -62,6 +62,11 @@ func main() {
 		cfg.Server.Host = "127.0.0.1"
 	}
 
+	// Default to port 8080 if none is set in config or via CLI flag.
+	if cfg.Server.Port == 0 {
+		cfg.Server.Port = 8080
+	}
+
 	app, err := server.New(cfg)
 	if err != nil {
 		log.Fatalf("failed to initialize server: %v", err)
