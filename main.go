@@ -62,9 +62,10 @@ func main() {
 		cfg.Server.Host = "127.0.0.1"
 	}
 
-	// Default to port 8080 if none is set in config or via CLI flag.
+	// Default to port 5050 instead of 8080 to avoid conflicts with other
+	// common local dev servers (e.g. webpack, various frameworks).
 	if cfg.Server.Port == 0 {
-		cfg.Server.Port = 8080
+		cfg.Server.Port = 5050
 	}
 
 	app, err := server.New(cfg)
