@@ -62,9 +62,9 @@ func main() {
 		cfg.Server.Host = "127.0.0.1"
 	}
 
-	// Default to port 8080; 5050 conflicted with another service on my machine.
+	// Default to port 3000; 8080 is frequently occupied by other dev servers.
 	if cfg.Server.Port == 0 {
-		cfg.Server.Port = 8080
+		cfg.Server.Port = 3000
 	}
 
 	app, err := server.New(cfg)
